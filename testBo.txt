@@ -3,6 +3,11 @@ Hallo was geht?
 
 Könnt Ihr das lesen?
 - JA	X
+<<<<<<< HEAD
 
+=======
+- Nein
+owiahjdowaijdoa
+>>>>>>> 7afb27f54f17161b067ce05e7bd0f0581730d24c
 
 ankreuzen
