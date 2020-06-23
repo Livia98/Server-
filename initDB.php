@@ -10,7 +10,6 @@ R::setup('mysql:host=localhost;dbname=to_do_db', 'root', '');
 $user = R::dispense('person');
 
 //gewünschte Attribute des Users
-
 $user->name = "Testuser";
 $user->password = "123polizei";
 
@@ -32,14 +31,14 @@ $todolist->name = "Hausaufgaben für die Schule";
 
 //Aufgabe einer Liste zuordnen (1:n)
 
-$todolist->owntodoList[] = $todo;
+$todolist->ownToDoList[] = $todo;
 
 //Person einer Aufgabe zuordnen (1:n)
 
 $todo->person = $user;
 
-$id = R::store($todo);
-$todo = R::load('todo', $id); 
+$id = R::store($todolist);
+$todolist = R::load('todolist', $id); 
 
 //Ausgabe
 
@@ -61,9 +60,8 @@ echo "Passwort: " . $user->password . "<br>";
 echo "--------------";
 
 echo "<h3>Liste</h3>";
-foreach($todolist->ownTodoList as $v) {
+foreach($todolist->ownToDoList as $v) {
     echo "Name: " . $v->name . "<br>";
-   
 }
 
 R::close();
