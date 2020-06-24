@@ -13,6 +13,11 @@ $user = R::dispense('person');
 $user->name = "Testuser";
 $user->password = "123polizei";
 
+//Neue Liste anlegen
+
+$todolist = R::dispense('todolist');
+$todolist->name = "Hausaufgaben für die Schule";
+
 //Neue Aufgabe hinzufügen
 
 $todo = R::dispense('todo');
@@ -24,18 +29,15 @@ $todo->beschreibung = "Seite 245 Nr. 1-4";
 $todo->gewicht = "4"; //1 bis 5 
 $todo->zeitpunkt = "228.06.2020";
 
-//Neue Liste anlegen
 
-$todolist = R::dispense('todolist');
-$todolist->name = "Hausaufgaben für die Schule";
 
 //Aufgabe einer Liste zuordnen (1:n)
 
-$todolist->ownToDoList[] = $todo;
+$todolist->xownTodoList[] = $todo;
 
-//Person einer Aufgabe zuordnen (1:n)
+//Person einer Liste zuordnen (1:n)
 
-$todo->person = $user;
+$todolist->person = $user;
 
 $id = R::store($todolist);
 $todolist = R::load('todolist', $id); 
@@ -52,7 +54,7 @@ echo "Zeitpunkt: " . $todo->zeitpunkt . "<br>";
 echo "--------------";
 
 echo "<h3>Person</h3>";
-$user = $todo->person;
+$user = $todolist->person;
 echo "Name: " . $user->name . "<br>";
 echo "Passwort: " . $user->password . "<br>";
 
@@ -60,7 +62,7 @@ echo "Passwort: " . $user->password . "<br>";
 echo "--------------";
 
 echo "<h3>Liste</h3>";
-foreach($todolist->ownToDoList as $v) {
+foreach($todolist->xownTodoList as $v) {
     echo "Name: " . $v->name . "<br>";
 }
 
