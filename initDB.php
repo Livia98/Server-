@@ -62,9 +62,10 @@ echo "Passwort: " . $user->password . "<br>";
 echo "--------------";
 
 echo "<h3>Liste</h3>";
-foreach($todolist->xownTodoList as $v) {
-    echo "Name: " . $v->name . "<br>";
-}
+// foreach($todolist->xownTodoList as $v) {
+//     echo "Name: " . $v->name . "<br>";
+// }
+echo "Name: " . $todolist->name;
 
 R::close();
 ?>
