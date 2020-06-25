@@ -20,14 +20,196 @@ $app->setBasePath((function () {
     }
     return '';
 })());
-//Alle ToDos aufrufen 
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
+//Alle Listen mit Aufgaben und Person, der die Liste gehört, werden angezeigt
 $app->get('/todolist', function (Request $request, Response $response, $args) {
     $todolist = R::findAll('todolist');
+    foreach($todolist as $todolist) {
+        $todolist->person;
+    }
     $response->getBody()->write(json_encode(R::exportAll($todolist, TRUE)));
-            return $response;
-        });
+    return $response;
+});
+
+//Eine bestimmte Liste abrufen
+$app->get('/todolist/{todolistid}', function (Request $request, Response $response, $args) {
+	$todolist = R::load('todolist', $args['todolistid']);
+	$first = reset( $todolist->ownTodoList );
+	$last = end( $todolist->ownTodoList ); 
+	$todolist->person;
+	$response->getBody()->write(json_encode($todolist));
+    return $response;
+});
+
+//Alle Listen zu einer Person abrufen
+/*$app->get('/todolists/findByPerson/', function (Request $request, Response $response, $args) {
+    $todoliste = R::findAll('todolist', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
+    foreach($todoliste as $todolist) {
+        $todolist->person;
+    }
+    $response->getBody()->write(json_encode(R::exportAll( $todoliste )));
+    return $response;
+
+});*/
+
+/*Alle Todos zu einer Liste
+$app->get('/todo/findBylist/', function (Request $request, Response $response, $args) {
+    $todos = R::findAll('todo', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
+    foreach($todos as $todo) {
+        $todo->todolist;
+    }
+    $response->getBody()->write(json_encode(R::exportAll( $todos )));
+    return $response;
+
+}); */
+
+/*Alle Listen (brauchen wir das überhaupt??)
+$app->get('/lists', function (Request $request, Response $response, $args) {
+    $todolists = R::findAll('todolist');
+    $response->getBody()->write(json_encode(R::exportAll( $todolists )));
+    return $response;
+});*/
+
+/*Alle Todos zu einer Person unabhängig von Listen
+$app->get('/todo/findByperson', function (Request $request, Response $response, $args) {
+    $todos = R::findAll('todo', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
+    foreach($todos as $todo) {
+        $todo->person;
+    }
+    $response->getBody()->write(json_encode(R::exportAll( $todos )));
+    return $response;
+});*/
+
+//User anlegen 
+$app->post('/newuser', function (Request $request, Response $response, $args) {
+	$parsedBody = $request->getParsedBody();
+	
+	$user = R::dispense('user');
+	$user->name = $parsedBody['name'];
+	$user->password = $parsedBody['password'];
+	
+	$p = R::load('todolist', $parsedBody['todolist_id']);
+	$user->todolist = $p;
+    
+	R::store($todo);
+	
+	$response->getBody()->write(json_encode($user));
+    return $response;
+});
 
 
+//Passwort abrufen
+$app->get('/psswd', function (Request $request, Response $response, $args) {
+    $user = R::load('user', $id );
+    $pwd = $user->password;
+
+    $response->getBody()->write(json_encode($pwd));
+    return $response;
+});
+
+
+//POST
+//Neue Liste anlegen
+$app->post('/newtodolist', function (Request $request, Response $response, $args) {
+	$parsedBody = $request->getParsedBody();
+	
+	$todolist = R::dispense('todolist');
+	$todolist->name = $parsedBody['name'];
+	//$todo->status = $parsedBody['status'];
+	//$todo->beschreibung = $parsedBody['beschreibung'];
+    //$todo->gewicht = $parsedBody['gewicht'];
+    //$todo->zeitpunkt = $parsedBody['zeitpunkt'];
+	
+	$p = R::load('person', $parsedBody['person_id']);
+	$todolist->person = $p;
+    
+    $l = R::load('todo', $parsedBody['todo_id']);
+    $todolist->todo = $l;
+	R::store($todo);
+	
+	$response->getBody()->write(json_encode($todolist));
+    return $response;
+});
+
+//Neue Aufgabe anlegen 
+$app->post('/newtodo', function (Request $request, Response $response, $args) {
+	$parsedBody = $request->getParsedBody();
+	
+	$todo = R::dispense('todo');
+	$todo->titel= $parsedBody['titel'];
+	$todo->status = $parsedBody['status'];
+	$todo->beschreibung = $parsedBody['beschreibung'];
+    $todo->gewicht = $parsedBody['gewicht'];
+    $todo->zeitpunkt = $parsedBody['zeitpunkt'];
+	
+	$p = R::load('person', $parsedBody['person_id']);
+	$todo->person = $p;
+    
+    $l = R::load('todolist', $parsedBody['todolist_id']);
+    $todo->todolist = $l;
+	R::store($todo);
+	
+	$response->getBody()->write(json_encode($todo));
+    return $response;
+});
+
+
+//PUT
+//Liste ändern 
+$app->put('/changetodolist', function (Request $request, Response $response, $args) {
+	$parsedBody = json_decode((string)$request->getBody(), true);
+	
+	$todolist = R::load('todolist', $parsedBody['id']);
+	$todolist->name = $parsedBody['name'];
+	
+	R::store($todolist);
+	
+	$response->getBody()->write(json_encode($todolist));
+    return $response;
+});
+
+//Aufgabe ändern
+$app->put('/changetodo', function (Request $request, Response $response, $args) {
+	$parsedBody = json_decode((string)$request->getBody(), true);
+	
+	$todo = R::load('todo', $parsedBody['id']);
+	$todo->titel = $parsedBody['titel'];
+	$todo->status = $parsedBody['status'];
+	$todo->beschreibung = $parsedBody['beschreibung'];
+    $todo->gewicht = $parsedBody['gewicht'];
+    $todo->zeitpunkt = $parsedBody['zeitpunkt'];
+
+	R::store($todo);
+	
+	$response->getBody()->write(json_encode($todo));
+    return $response;
+});
+
+
+//DELETE
+//eine Liste löschen 
+$app->delete('/deletetodolist/{todolistid}', function (Request $request, Response $response, $args) {
+	$todolist = R::load('todolist', $args['todolistid']);
+	//R::trash($rezept);
+	$response->getBody()->write(json_encode($todolist));
+    return $response;
+});
+
+//eine Aufgabe löschen 
+$app->delete('/deletetodo/{todoid}', function (Request $request, Response $response, $args) {
+	$todo = R::load('todo', $args['todoid']);
+	//R::trash($todo);
+	$response->getBody()->write(json_encode($todo));
+    return $response;
+});
 
 $app->run(); 
 ?>
