@@ -32,9 +32,9 @@ $app->add(function ($request, $handler) {
 //Alle Listen mit Aufgaben und Person, der die Liste gehört, werden angezeigt
 $app->get('/todolist', function (Request $request, Response $response, $args) {
     $todolist = R::findAll('todolist');
-    foreach($todolist as $todolist) {
-        $todolist->person;
-    }
+    //foreach($todolist as $todolist) {
+    //    $todolist->person;
+    //}
     $response->getBody()->write(json_encode(R::exportAll($todolist, TRUE)));
     return $response;
 });
@@ -92,7 +92,7 @@ $app->get('/todo/findByperson', function (Request $request, Response $response, 
 $app->post('/newuser', function (Request $request, Response $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	
-	$user = R::dispense('user');
+	$user = R::dispense('person');
 	$user->name = $parsedBody['name'];
 	$user->password = $parsedBody['password'];
 	
@@ -107,11 +107,9 @@ $app->post('/newuser', function (Request $request, Response $response, $args) {
 
 
 //Passwort abrufen
-$app->get('/psswd', function (Request $request, Response $response, $args) {
-    $user = R::load('user', $id );
-    $pwd = $user->password;
-
-    $response->getBody()->write(json_encode($pwd));
+$app->get('/user', function (Request $request, Response $response, $args) {
+    $users = R::findAll('person');
+    $response->getBody()->write(json_encode($users));
     return $response;
 });
 
