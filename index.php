@@ -3,6 +3,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request; 
 use Slim\Factory\AppFactory;
 
+
+
 require __DIR__ . '/../vendor/autoload.php';
 require 'rb.php';
 
@@ -106,10 +108,10 @@ $app->post('/newuser', function (Request $request, Response $response, $args) {
 });
 
 
-//Passwort abrufen
-$app->get('/user', function (Request $request, Response $response, $args) {
+//User abrufen
+$app->get('/users', function (Request $request, Response $response, $args) {
     $users = R::findAll('person');
-    $response->getBody()->write(json_encode($users));
+    $response->getBody()->write(json_encode(R::exportAll($users, TRUE)));
     return $response;
 });
 
