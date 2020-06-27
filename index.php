@@ -176,8 +176,10 @@ $app->put('/changetodolist', function (Request $request, Response $response, $ar
     return $response;
 });
 
+
+
 //Aufgabe ändern
-$app->put('/changetodo', function (Request $request, Response $response, $args) {
+$app->put('/changetodo/{id}', function (Request $request, Response $response, $args) {
 	$parsedBody = json_decode((string)$request->getBody(), true);
 	
 	$todo = R::load('todo', $parsedBody['id']);
