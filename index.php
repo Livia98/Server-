@@ -52,15 +52,15 @@ $app->get('/todolist/{todolistid}', function (Request $request, Response $respon
 });
 
 //Alle Listen zu einer Person abrufen
-/*$app->get('/todolists/findByPerson/', function (Request $request, Response $response, $args) {
-    $todoliste = R::findAll('todolist', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
+$app->get('/todolists/findByPerson/', function (Request $request, Response $response, $args) {
+    $todoliste = R::findAll('todolist', 'person_id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
     foreach($todoliste as $todolist) {
         $todolist->person;
     }
     $response->getBody()->write(json_encode(R::exportAll( $todoliste )));
     return $response;
 
-});*/
+});
 
 /*Alle Todos zu einer Liste
 $app->get('/todo/findBylist/', function (Request $request, Response $response, $args) {
@@ -91,17 +91,17 @@ $app->get('/todo/findByperson', function (Request $request, Response $response, 
 });*/
 
 //User anlegen 
-$app->post('/newuser', function (Request $request, Response $response, $args) {
+$app->post('/newuser/{name}/{password}', function (Request $request, Response $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	
 	$user = R::dispense('person');
-	$user->name = $parsedBody['name'];
-	$user->password = $parsedBody['password'];
+	$user->name = $args['name'];
+	$user->password = $args['password'];
 	
-	$p = R::load('todolist', $parsedBody['todolist_id']);
-	$user->todolist = $p;
+	// $p = R::load('todolist', $parsedBody['todolist_id']);
+	// $user->todolist = $p;
     
-	R::store($todo);
+	R::store($user);
 	
 	$response->getBody()->write(json_encode($user));
     return $response;
