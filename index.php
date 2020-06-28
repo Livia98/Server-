@@ -176,7 +176,32 @@ $app->put('/changetodolist', function (Request $request, Response $response, $ar
     return $response;
 });
 
-
+//PUT von Marc konstruiert um auf Overview Listenname und Aufgaben zu editieren
+$app->put('/changetodolists/{id}', function (Request $request, Response $response, $args) {
+    $parsedBody = json_decode((string)$request->getBody(), true);
+   
+    $todolist = R::load('todolist', $args['id']);
+   
+   
+    $todolist->name = $parsedBody['name'];
+   
+    $todolist->ownTodo = [];
+    foreach( $parsedBody['ownTodo'] as $t) {
+    $todo = R::dispense('todo');
+    $todo->titel = $t['titel'];
+    $todo->status = $t['status'];
+    $todo->beschreibung = $t['beschreibung'];
+    $todo->gewicht = $t['gewicht'];
+    $todo->zeitpunkt = $t['zeitpunkt'];
+    $todolist->ownTodo[] = $todo;
+    }
+   
+    R::store($todolist);
+   
+    $response->getBody()->write(json_encode($todolist));
+    return $response;
+   });
+   
 
 //Aufgabe ändern
 $app->put('/changetodo/{id}', function (Request $request, Response $response, $args) {
