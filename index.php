@@ -118,22 +118,23 @@ $app->get('/users', function (Request $request, Response $response, $args) {
 
 //POST
 //Neue Liste anlegen
-$app->post('/newtodolist', function (Request $request, Response $response, $args) {
+$app->post('/newtodolist/{name}/{pid}', function (Request $request, Response $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	
 	$todolist = R::dispense('todolist');
-	$todolist->name = $parsedBody['name'];
+	$todolist->name = $args['name'];
+	$todolist->person_id = $args['pid'];
 	//$todo->status = $parsedBody['status'];
 	//$todo->beschreibung = $parsedBody['beschreibung'];
     //$todo->gewicht = $parsedBody['gewicht'];
     //$todo->zeitpunkt = $parsedBody['zeitpunkt'];
 	
-	$p = R::load('person', $parsedBody['person_id']);
-	$todolist->person = $p;
+	//$p = R::load('person', $parsedBody['person_id']);
+	//$todolist->person = $p;
     
     $l = R::load('todo', $parsedBody['todo_id']);
     $todolist->todo = $l;
-	R::store($todo);
+	R::store($todolist);
 	
 	$response->getBody()->write(json_encode($todolist));
     return $response;
