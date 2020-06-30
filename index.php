@@ -129,10 +129,10 @@ $app->post('/newtodolist/{pid}/{name}', function (Request $request, Response $re
     //$todo->gewicht = $parsedBody['gewicht'];
     //$todo->zeitpunkt = $parsedBody['zeitpunkt'];
 	
-	//$p = R::load('person', $parsedBody['person_id']);
+    //$p = R::load('person', $args['person_id']);
 	//$todolist->person = $p;
     
-    $l = R::load('todo', $parsedBody['todo_id']);
+    $l = R::load('todo', $args['todo_id']);
     $todolist->todo = $l;
 	R::store($todolist);
 	
