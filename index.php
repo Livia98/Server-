@@ -118,7 +118,7 @@ $app->get('/users', function (Request $request, Response $response, $args) {
 
 //POST
 //Neue Liste anlegen
-$app->post('/newtodolist/{name}/{pid}', function (Request $request, Response $response, $args) {
+$app->post('/newtodolist/{pid}/{name}', function (Request $request, Response $response, $args) {
 	$parsedBody = $request->getParsedBody();
 	
 	$todolist = R::dispense('todolist');
@@ -226,7 +226,7 @@ $app->put('/changetodo/{id}', function (Request $request, Response $response, $a
 //eine Liste löschen 
 $app->delete('/deletetodolist/{todolistid}', function (Request $request, Response $response, $args) {
 	$todolist = R::load('todolist', $args['todolistid']);
-	//R::trash($rezept);
+	R::trash($todolist);
 	$response->getBody()->write(json_encode($todolist));
     return $response;
 });
