@@ -234,7 +234,7 @@ $app->delete('/deletetodolist/{todolistid}', function (Request $request, Respons
 //eine Aufgabe löschen 
 $app->delete('/deletetodo/{todoid}', function (Request $request, Response $response, $args) {
 	$todo = R::load('todo', $args['todoid']);
-	//R::trash($todo);
+	R::trash($todo);
 	$response->getBody()->write(json_encode($todo));
     return $response;
 });
