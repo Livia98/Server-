@@ -32,7 +32,7 @@ $todo6 = R::dispense('todo');
 
 //Atrribute einer Aufgabe
 $todo->titel = "Mathehausaufgaben machen";
-$todo->status = "Offen"; //insgesamt 5 Status
+$todo->status = "offen"; //insgesamt 5 Status
 $todo->beschreibung = "Seite 245 Nr. 1-4";
 $todo->gewicht = "4"; //1 bis 5 
 $todo->endzeitpunkt = "28.06.2020";
