@@ -124,16 +124,6 @@ $app->post('/newtodolist/{pid}/{name}', function (Request $request, Response $re
 	$todolist = R::dispense('todolist');
 	$todolist->name = $args['name'];
 	$todolist->person_id = $args['pid'];
-	//$todo->status = $parsedBody['status'];
-	//$todo->beschreibung = $parsedBody['beschreibung'];
-    //$todo->gewicht = $parsedBody['gewicht'];
-    //$todo->zeitpunkt = $parsedBody['zeitpunkt'];
-	
-    //$p = R::load('person', $args['person_id']);
-	//$todolist->person = $p;
-    
-    $l = R::load('todo', $args['todo_id']);
-    $todolist->todo = $l;
 	R::store($todolist);
 	
 	$response->getBody()->write(json_encode($todolist));
