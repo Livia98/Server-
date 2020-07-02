@@ -130,21 +130,18 @@ $app->post('/newtodolist/{pid}/{name}', function (Request $request, Response $re
     return $response;
 });
 
-//Neue Aufgabe anlegen von Julian umgebaut
-$app->post('/newtodo/{titel}/{status}/{beschreibung}/{gewicht}/{zeitpunkt}/{todolist_id}', function (Request $request, Response $response, $args) {
-	$parsedBody = $request->getParsedBody();
+//ToDo anlegen neu
+$app->post('/newtodo', function (Request $request, Response $response, $args) {
+	$parsedBody = json_decode((string)$request->getBody(), true);
 	
 	$todo = R::dispense('todo');
-	$todo->titel= $args['titel'];
-	$todo->status = $args['status'];
-	$todo->beschreibung = $args['beschreibung'];
-    $todo->gewicht = $args['gewicht'];
-    $todo->zeitpunkt = $args['zeitpunkt'];
-	
-	// $p = R::load('person', $parsedBody['person_id']);
-	// $todo->person = $p;
+	$todo->titel= $parsedBody['titel'];
+	$todo->status = $parsedBody['status'];
+	$todo->beschreibung = $parsedBody['beschreibung'];
+    $todo->gewicht = $parsedBody['gewicht'];
+    $todo->zeitpunkt = $parsedBody['zeitpunkt'];
     
-    $l = R::load('todolist', $args['todolist_id']);
+    $l = R::load('todolist', $parsedBody['todolist_id']);
     $todo->todolist = $l;
 	R::store($todo);
 	
