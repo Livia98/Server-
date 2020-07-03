@@ -12,7 +12,7 @@ $user = R::dispense('person');
 
 //gewünschte Attribute des Users
 $user->name = "Perschke";
-$user->password = "12345";
+$user->password = "12345678";
 
 //Neue Liste anlegen
 
@@ -35,37 +35,37 @@ $todo->titel = "Mathehausaufgaben machen";
 $todo->status = "offen"; //insgesamt 5 Status
 $todo->beschreibung = "Seite 245 Nr. 1-4";
 $todo->gewicht = "4"; //1 bis 5 
-$todo->endzeitpunkt = "28.06.2020";
+$todo->zeitpunkt = "2020-10-12";
 
 $todo2->titel = "Englischhausaufgaben machen";
 $todo2->status = "erledigt"; //insgesamt 5 Status
 $todo2->beschreibung = "S.76 Nr. 1 und 2";
 $todo2->gewicht = "5"; //1 bis 5 
-$todo2->endzeitpunkt = "28.08.2020";
+$todo2->zeitpunkt = "2020-03-10";
 
 $todo3->titel = "Vokabeln lernen für Spanisch";
 $todo3->status = "in Bearbeitung"; //insgesamt 5 Status
 $todo3->beschreibung = "Buch S. 230-235 Kapitel: La historia de España";
 $todo3->gewicht = "3"; //1 bis 5 
-$todo3->endzeitpunkt = "16.07.2020";
+$todo3->zeitpunkt = "2020-05-23"; 
 
 $todo4->titel = "Flugticket kaufen";
 $todo4->status = "offen"; //insgesamt 5 Status
 $todo4->beschreibung = "Flug am 24.10.2020 nach LAX";
 $todo4->gewicht = "3"; //1 bis 5 
-$todo4->endzeitpunkt = "20.09.2020";
+$todo4->zeitpunkt = "2020-06-30";
 
 $todo5->titel = "Auto mieten für 2 Wochen";
 $todo5->status = "abgebrochen"; //insgesamt 5 Status
 $todo5->beschreibung = "SIXXT";
 $todo5->gewicht = "1"; //1 bis 5 
-$todo5->endzeitpunkt = "10.10.2020";
+$todo5->zeitpunkt = "2020-09-05";
 
 $todo6->titel = "Hotelzimmer buchen";
 $todo6->status = "offen"; //insgesamt 5 Status
 $todo6->beschreibung = "Hilton Hotel in LAX";
 $todo6->gewicht = "2"; //1 bis 5 
-$todo6->endzeitpunkt = "20.10.2020";
+$todo6->zeitpunkt = "2020-01-20";
 
 
 
