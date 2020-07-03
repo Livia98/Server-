@@ -4,7 +4,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 
-
 require __DIR__ . '/../vendor/autoload.php';
 require 'rb.php';
 
@@ -31,25 +30,6 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-//Alle Listen mit Aufgaben und Person, der die Liste gehört, werden angezeigt
-$app->get('/todolist', function (Request $request, Response $response, $args) {
-    $todolist = R::findAll('todolist');
-    //foreach($todolist as $todolist) {
-    //    $todolist->person;
-    //}
-    $response->getBody()->write(json_encode(R::exportAll($todolist, TRUE)));
-    return $response;
-});
-
-//Eine bestimmte Liste abrufen
-$app->get('/todolist/{todolistid}', function (Request $request, Response $response, $args) {
-	$todolist = R::load('todolist', $args['todolistid']);
-	$first = reset( $todolist->ownTodoList );
-	$last = end( $todolist->ownTodoList ); 
-	$todolist->person;
-	$response->getBody()->write(json_encode($todolist));
-    return $response;
-});
 
 //Alle Listen zu einer Person abrufen
 $app->get('/todolists/findByPerson/', function (Request $request, Response $response, $args) {
@@ -62,44 +42,14 @@ $app->get('/todolists/findByPerson/', function (Request $request, Response $resp
 
 });
 
-/*Alle Todos zu einer Liste
-$app->get('/todo/findBylist/', function (Request $request, Response $response, $args) {
-    $todos = R::findAll('todo', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
-    foreach($todos as $todo) {
-        $todo->todolist;
-    }
-    $response->getBody()->write(json_encode(R::exportAll( $todos )));
-    return $response;
-
-}); */
-
-/*Alle Listen (brauchen wir das überhaupt??)
-$app->get('/lists', function (Request $request, Response $response, $args) {
-    $todolists = R::findAll('todolist');
-    $response->getBody()->write(json_encode(R::exportAll( $todolists )));
-    return $response;
-});*/
-
-/*Alle Todos zu einer Person unabhängig von Listen
-$app->get('/todo/findByperson', function (Request $request, Response $response, $args) {
-    $todos = R::findAll('todo', 'id=:pid', [':pid'=>$request->getQueryParams()['pid']]);
-    foreach($todos as $todo) {
-        $todo->person;
-    }
-    $response->getBody()->write(json_encode(R::exportAll( $todos )));
-    return $response;
-});*/
 
 //User anlegen 
-$app->post('/newuser/{name}/{password}', function (Request $request, Response $response, $args) {
-	$parsedBody = $request->getParsedBody();
+$app->post('/newuser', function (Request $request, Response $response, $args) {
+	$parsedBody = json_decode((string)$request->getBody(), true);
 	
 	$user = R::dispense('person');
-	$user->name = $args['name'];
-	$user->password = $args['password'];
-	
-	// $p = R::load('todolist', $parsedBody['todolist_id']);
-	// $user->todolist = $p;
+	$user->name = $parsedBody['name'];
+	$user->password = $parsedBody['password'];
     
 	R::store($user);
 	
@@ -130,7 +80,7 @@ $app->post('/newtodolist/{pid}/{name}', function (Request $request, Response $re
     return $response;
 });
 
-//ToDo anlegen neu
+//ToDo anlegen 
 $app->post('/newtodo', function (Request $request, Response $response, $args) {
 	$parsedBody = json_decode((string)$request->getBody(), true);
 	
@@ -164,7 +114,7 @@ $app->put('/changetodolist', function (Request $request, Response $response, $ar
     return $response;
 });
 
-//PUT von Marc konstruiert um auf Overview Listenname und Aufgaben zu editieren
+//PUT 
 $app->put('/changetodolists/{id}', function (Request $request, Response $response, $args) {
     $parsedBody = json_decode((string)$request->getBody(), true);
    
